@@ -17,6 +17,84 @@ struct MemeBagTestTests {
         }
         
     }
+    
+    @Test func testCaseC_2() {
+        
+        //     Snapshot: TouchA (50, 50), TouchB (100, 50)
+        //     Reconcile TouchA(60, 50), TouchC (150, 50)
+        //     In this scenario, we would want to
+        //       1.) Remove touch B, re-align from TouchA previous locations.
+        //       2.) Register the movement of TouchA, ignoring TouchB and TouchC
+        //       3.) Re-align for TouchA and TouchC "starting" with new TouchA. (in that order)
+        //     This we call "Add And Remove Touch Flow" (This is a 1 in 10000 event...)
+        
+        let memeBag = Animus2TouchMemeBag(format: .grab)
+        
+        let objectA = Objeqt(value: 0)
+        let objectB = Objeqt(value: 0)
+        let objectC = Objeqt(value: 0)
+        
+        let fakeIdA = ObjectIdentifier(objectA)
+        let fakeIdB = ObjectIdentifier(objectB)
+        let fakeIdC = ObjectIdentifier(objectC)
+        
+        let memeAfterC = Animus2TouchMeme(x: 150, y: 50, touchID: fakeIdC)
+        memeBag.afterMemesAdd(memeAfterC)
+        
+        let memeBeforeA = Animus2TouchMeme(x: 50, y: 50, touchID: fakeIdA)
+        memeBag.beforeMemesAdd(memeBeforeA)
+        
+        let memeAfterA = Animus2TouchMeme(x: 60, y: 50, touchID: fakeIdA)
+        memeBag.afterMemesAdd(memeAfterA)
+        
+        let memeBeforeB = Animus2TouchMeme(x: 100, y: 50, touchID: fakeIdB)
+        memeBag.beforeMemesAdd(memeBeforeB)
+        
+        memeBag.bussOutCommandz()
+        
+        print("====== C-2 ======")
+        
+        memeBag.printCommands()
+    }
+    
+    @Test func testCaseC_1() {
+        
+        //     Snapshot: TouchA (50, 50), TouchB (100, 50)
+        //     Reconcile TouchA(60, 50), TouchC (150, 50)
+        //     In this scenario, we would want to
+        //       1.) Remove touch B, re-align from TouchA previous locations.
+        //       2.) Register the movement of TouchA, ignoring TouchB and TouchC
+        //       3.) Re-align for TouchA and TouchC "starting" with new TouchA. (in that order)
+        //     This we call "Add And Remove Touch Flow" (This is a 1 in 10000 event...)
+        
+        let memeBag = Animus2TouchMemeBag(format: .grab)
+        
+        let objectA = Objeqt(value: 0)
+        let objectB = Objeqt(value: 0)
+        let objectC = Objeqt(value: 0)
+        
+        let fakeIdA = ObjectIdentifier(objectA)
+        let fakeIdB = ObjectIdentifier(objectB)
+        let fakeIdC = ObjectIdentifier(objectC)
+        
+        let memeBeforeA = Animus2TouchMeme(x: 50, y: 50, touchID: fakeIdA)
+        memeBag.beforeMemesAdd(memeBeforeA)
+        
+        let memeBeforeB = Animus2TouchMeme(x: 100, y: 50, touchID: fakeIdB)
+        memeBag.beforeMemesAdd(memeBeforeB)
+        
+        let memeAfterA = Animus2TouchMeme(x: 60, y: 50, touchID: fakeIdA)
+        memeBag.afterMemesAdd(memeAfterA)
+        
+        let memeAfterC = Animus2TouchMeme(x: 150, y: 50, touchID: fakeIdC)
+        memeBag.afterMemesAdd(memeAfterC)
+        
+        memeBag.bussOutCommandz()
+        
+        print("====== C-1 ======")
+        
+        memeBag.printCommands()
+    }
 
     @Test func testCaseB_1() {
         
